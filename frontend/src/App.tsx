@@ -52,7 +52,7 @@ function App() {
   // Generation & Export state
   const [isGenerating, setIsGenerating] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
-  const [stats, setStats] = useState({ total: 0, preserved: 0 })
+  const [_stats, setStats] = useState({ total: 0, preserved: 0 })
   const [error, setError] = useState<string | null>(null)
 
   const currentPage = pages[currentPageIndex] || pages[0]
@@ -227,17 +227,10 @@ key takeaway: matrix powers can be computed easily via A^k = P * D^k * P^-1`
     <div className="app-container">
       <header className="header glass">
         <div className="brand">
-          <h1>🖋️ Inkwell</h1>
-          <span className="brand-tag">Vector PDF & Pen</span>
+          <h1>Inkwell</h1>
         </div>
 
         <div className="controls">
-          {stats.total > 0 && (
-            <span className={`badge ${stats.preserved === stats.total ? 'success' : 'warning'}`}>
-              {stats.preserved} Math Formulas
-            </span>
-          )}
-
           {/* Page Navigator */}
           <div className="page-navigation-bar">
             <button
@@ -245,41 +238,25 @@ key takeaway: matrix powers can be computed easily via A^k = P * D^k * P^-1`
               onClick={() => setCurrentPageIndex((prev) => Math.max(0, prev - 1))}
               disabled={currentPageIndex === 0}
               title="Previous Page"
-            >
-              ◀
-            </button>
+            >◀</button>
             <span className="page-indicator">
-              Page {currentPageIndex + 1} of {pages.length}
+              {currentPageIndex + 1} / {pages.length}
             </span>
             <button
               className="page-btn"
               onClick={() => setCurrentPageIndex((prev) => Math.min(pages.length - 1, prev + 1))}
               disabled={currentPageIndex === pages.length - 1}
               title="Next Page"
-            >
-              ▶
-            </button>
-            <button
-              className="add-page-btn"
-              onClick={handleAddPage}
-              title="Add a new blank page to your notes"
-            >
-              + Page
-            </button>
+            >▶</button>
+            <button className="add-page-btn" onClick={handleAddPage} title="Add page">+ Page</button>
             {pages.length > 1 && (
-              <button
-                className="delete-page-btn"
-                onClick={handleDeletePage}
-                title="Delete this page"
-              >
-                🗑️
-              </button>
+              <button className="delete-page-btn" onClick={handleDeletePage} title="Delete page">✕</button>
             )}
           </div>
 
-          {/* Theme Selector */}
+          {/* Theme */}
           <div className="control-group">
-            <label className="control-label" htmlFor="theme-select">Paper:</label>
+            <label className="control-label" htmlFor="theme-select">Paper</label>
             <select
               id="theme-select"
               className="select-input"
@@ -287,104 +264,85 @@ key takeaway: matrix powers can be computed easily via A^k = P * D^k * P^-1`
               onChange={(e) => {
                 const newTheme = e.target.value as ThemeType
                 setTheme(newTheme)
-                if (newTheme.startsWith('dark')) {
-                  setDrawColor('#38bdf8')
-                } else {
-                  setDrawColor('#1e3a8a')
-                }
+                setDrawColor(newTheme.startsWith('dark') ? '#38bdf8' : '#1e3a8a')
               }}
             >
-              <option value="grid">📐 Minimal Grid</option>
-              <option value="dark">🌙 Dark Slate Grid</option>
-              <option value="dark-clean">🖤 Dark Minimal</option>
-              <option value="dotgrid">⠇ Dot Matrix</option>
-              <option value="clean">📄 Clean White</option>
+              <option value="grid">Minimal Grid</option>
+              <option value="dark">Dark Slate Grid</option>
+              <option value="dark-clean">Dark Minimal</option>
+              <option value="dotgrid">Dot Matrix</option>
+              <option value="clean">Clean White</option>
             </select>
           </div>
 
-          {/* Font Selector */}
+          {/* Font */}
           <div className="control-group">
-            <label className="control-label" htmlFor="font-select">Handwriting:</label>
+            <label className="control-label" htmlFor="font-select">Font</label>
             <select
               id="font-select"
               className="select-input"
               value={font}
               onChange={(e) => setFont(e.target.value as FontType)}
             >
-              <option value="architect">✍️ Architects Daughter</option>
-              <option value="kalam">🖋️ Kalam (Ballpoint Gel)</option>
-              <option value="caveat">📝 Caveat (Fountain Pen)</option>
-              <option value="shadows">🖊️ Shadows Into Light</option>
-              <option value="reenie">⚡ Reenie Beanie (Scribble)</option>
-              <option value="gochi">✏️ Gochi Hand (Marker)</option>
+              <option value="architect">Architects Daughter</option>
+              <option value="kalam">Kalam</option>
+              <option value="caveat">Caveat</option>
+              <option value="shadows">Shadows Into Light</option>
+              <option value="reenie">Reenie Beanie</option>
+              <option value="gochi">Gochi Hand</option>
             </select>
           </div>
 
-          {/* Layout Selector */}
+          {/* Layout */}
           <div className="control-group">
-            <label className="control-label" htmlFor="layout-select">Layout:</label>
+            <label className="control-label" htmlFor="layout-select">Layout</label>
             <select
               id="layout-select"
               className="select-input"
               value={layout}
               onChange={(e) => setLayout(e.target.value as LayoutType)}
             >
-              <option value="single">📄 1 Column</option>
-              <option value="two-column">📰 2 Columns (Cheat Sheet)</option>
-              <option value="cornell">📑 Cornell Notes</option>
+              <option value="single">Single Column</option>
+              <option value="two-column">Two Column</option>
+              <option value="cornell">Cornell Notes</option>
             </select>
           </div>
 
-          {/* Drawing & Annotation Mode Toggle Button in Navbar */}
           <button
             onClick={() => setIsDrawingMode(!isDrawingMode)}
             className={`btn-secondary draw-toggle-btn ${isDrawingMode ? 'active' : ''}`}
-            title="Toggle Drawing, Highlighting & Freeform Text annotations"
+            title="Toggle annotation mode"
           >
-            {isDrawingMode ? '✏️ Annotating (Active)' : '✏️ Annotate'}
+            {isDrawingMode ? 'Annotating' : 'Annotate'}
           </button>
 
-          <button onClick={loadExample} className="btn-secondary" title="Load sample raw text notes">
-            Load Example
+          <button onClick={loadExample} className="btn-secondary" title="Load example notes">
+            Example
           </button>
 
-          <button 
-            onClick={handleGenerate} 
-            disabled={isGenerating || !currentPage.inputText.trim()} 
+          <button
+            onClick={handleGenerate}
+            disabled={isGenerating || !currentPage.inputText.trim()}
             className="btn-primary"
           >
-            {isGenerating ? (
-              <>
-                <span className="spinner"></span> Gemma AI Formatting...
-              </>
-            ) : (
-              'Generate Notes'
-            )}
+            {isGenerating ? <><span className="spinner"></span> Generating…</> : 'Generate'}
           </button>
 
-          {/* High-Resolution 300 DPI Export */}
-          <button 
-            onClick={exportPDF} 
-            disabled={isExporting || (!currentPage.markdown && pages.every(p => !p.markdown))} 
+          <button
+            onClick={exportPDF}
+            disabled={isExporting || (!currentPage.markdown && pages.every(p => !p.markdown))}
             className="btn-export"
-            title="Compile ultra-high quality 300 DPI PDF (lossless PNG, paper background, math & highlights)"
+            title="Export PDF"
           >
-            {isExporting ? (
-              <>
-                <span className="spinner"></span> Compiling PDF...
-              </>
-            ) : (
-              pages.length > 1 ? `📥 Download PDF (${pages.length}P)` : '📥 Download PDF'
-            )}
+            {isExporting ? <><span className="spinner"></span> Exporting…</> : 'Export PDF'}
           </button>
 
-          {/* Native Vector Print to PDF */}
           <button
             onClick={handleVectorPrint}
             className="btn-secondary"
-            title="Print or Save as Vector PDF using browser's native vector print engine"
+            title="Print or Save as Vector PDF using browser's native print engine"
           >
-            🖨️ Vector Print
+            Vector Print
           </button>
         </div>
       </header>
