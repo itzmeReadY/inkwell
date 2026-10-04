@@ -308,9 +308,6 @@ async def compile_html_to_pdf(
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
     }}
-    * {{
-      font-family: {font_family} !important;
-    }}
     .page-wrapper {{
       position: relative;
       width: 100%;
@@ -438,8 +435,6 @@ async def compile_html_to_pdf(
 </html>
 """
 
-    with open('debug_html.html', 'w', encoding='utf-8') as f:
-        f.write(html_content)
     async with async_playwright() as p:
         # Launch Chromium. It handles downloading its own browser on first run.
         browser = await p.chromium.launch(headless=True)

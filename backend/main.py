@@ -31,7 +31,6 @@ app.add_middleware(
 class CleanRequest(BaseModel):
     text: str
     layout: Optional[str] = "single"
-    ai_model: Optional[str] = "cloud"
 
 class CleanResponse(BaseModel):
     markdown: str
@@ -72,11 +71,11 @@ async def clean_notes(request: CleanRequest):
     if not request.text or not request.text.strip():
         raise HTTPException(status_code=400, detail="Text cannot be empty.")
         
-    # Call AI to convert plain text into clean Markdown + proper LaTeX formulas
+    # Call Gemma AI to convert plain text into clean Markdown + proper LaTeX formulas
     try:
-        final_markdown = llm.generate(request.text, layout=request.layout or "single", ai_model=request.ai_model)
+        final_markdown = llm.generate(request.text, layout=request.layout or "single")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"AI generation failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Gemma AI generation failed: {str(e)}")
         
     # Count LaTeX formulas generated in the notes
     display_eqs = len(re.findall(r'\$\$[\s\S]*?\$\$', final_markdown))

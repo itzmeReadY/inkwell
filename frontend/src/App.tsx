@@ -38,7 +38,6 @@ function App() {
   const [theme, setTheme] = useState<ThemeType>('grid')
   const [font, setFont] = useState<FontType>('architect')
   const [layout, setLayout] = useState<LayoutType>('single')
-  const [aiModel, setAiModel] = useState<'cloud'|'local'>('cloud')
 
   // Direct editing state for generated notes
   const [isEditingMarkdown, setIsEditingMarkdown] = useState(false)
@@ -100,8 +99,7 @@ function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           text: currentPage.inputText,
-          layout: layout,
-          ai_model: aiModel
+          layout: layout
         }),
       })
       
@@ -163,6 +161,11 @@ key takeaway: matrix powers can be computed easily via A^k = P * D^k * P^-1`
     }
 
     try {
+      // Grab the already-rendered HTML directly from the preview DOM
+      // This guarantees the PDF looks EXACTLY like the preview
+      const previewContent = document.getElementById('inkwell-preview-content')
+      const renderedHtml = previewContent ? previewContent.innerHTML : ''
+
       // Build request payload for backend
       const payload = {
         theme,
@@ -171,8 +174,9 @@ key takeaway: matrix powers can be computed easily via A^k = P * D^k * P^-1`
         filename: pages.length > 1
           ? `inkwell-notes-${pages.length}-pages-${theme}-${layout}.pdf`
           : `inkwell-notes-${theme}-${layout}.pdf`,
-        pages: pages.map(page => ({
-          markdown: page.markdown,
+        pages: pages.map((page, index) => ({
+          html: index === currentPageIndex ? renderedHtml : page.markdown,
+          markdown: index === currentPageIndex ? undefined : page.markdown,
           drawings: page.drawingDataUrl ? [page.drawingDataUrl] : undefined,
           textBoxes: page.textBoxes
         }))
@@ -328,21 +332,6 @@ key takeaway: matrix powers can be computed easily via A^k = P * D^k * P^-1`
               <option value="single">📄 1 Column</option>
               <option value="two-column">📰 2 Columns (Cheat Sheet)</option>
               <option value="cornell">📑 Cornell Notes</option>
-            </select>
-          </div>
-
-          {/* AI Model Selector */}
-          <div className="control-group">
-            <label className="control-label" htmlFor="ai-select">AI Model:</label>
-            <select
-              id="ai-select"
-              className="select-input"
-              value={aiModel}
-              onChange={(e) => setAiModel(e.target.value as 'cloud' | 'local')}
-              disabled={isGenerating}
-            >
-              <option value="cloud">☁️ Cloud (Gemma)</option>
-              <option value="local">🖥️ Local (Ollama)</option>
             </select>
           </div>
 

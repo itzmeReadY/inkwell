@@ -4,20 +4,21 @@ import re
 
 # Gemma models hosted via Google AI Studio API with fast fallbacks
 CANDIDATE_MODELS = [
-    "gemma-4-26b-a4b-it",
-    "gemini-2.5-flash-lite",
-    "gemini-2.5-flash",
-    "gemini-flash-latest"
+    "gemma-2-27b-it",
+    "gemma-2-9b-it",
 ]
 
-import requests
-
-def generate(text: str, layout: str = "single", ai_model: str = "cloud") -> str:
+def generate(text: str, layout: str = "single") -> str:
     """
-    Calls the AI API to convert raw, messy, plain-text lecture notes
+    Calls the Gemma AI API to convert raw, messy, plain-text lecture notes
     into clean, structured Markdown with proper LaTeX/KaTeX math formulas.
-    Supports Google AI Studio (Gemma/Gemini) and local Ollama (gemma2:2b).
     """
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY environment variable not set")
+        
+    client = genai.Client(api_key=api_key)
+
     layout_instruction = ""
     if layout == "two-column":
         layout_instruction = """
@@ -54,44 +55,26 @@ Raw Plain Text Notes:
 {text}
 """
 
-    if ai_model == "local":
+    last_error = None
+    for model_name in CANDIDATE_MODELS:
         try:
-            response = requests.post("http://127.0.0.1:11434/api/generate", json={
-                "model": "gemma2:2b",
-                "prompt": prompt,
-                "stream": False
-            })
-            response.raise_for_status()
-            output = response.json().get("response", "").strip()
-            return _clean_markdown_output(output)
-        except Exception as e:
-            raise RuntimeError(f"Local Ollama generation failed. Make sure Ollama is running and gemma2:2b is pulled. Error: {e}")
-    else:
-        api_key = os.environ.get("GEMINI_API_KEY")
-        if not api_key:
-            raise ValueError("GEMINI_API_KEY environment variable not set")
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+            )
+            output = response.text.strip()
             
-        client = genai.Client(api_key=api_key)
-        last_error = None
-        for model_name in CANDIDATE_MODELS:
-            try:
-                response = client.models.generate_content(
-                    model=model_name,
-                    contents=prompt,
-                )
-                output = response.text.strip()
-                return _clean_markdown_output(output)
-            except Exception as e:
-                last_error = e
-                continue
+            # Clean up outer markdown code fences if model wrapped entire output in ```markdown ... ```
+            if output.startswith("```markdown"):
+                output = output[11:]
+            elif output.startswith("```"):
+                output = output[3:]
+            if output.endswith("```"):
+                output = output[:-3]
                 
-        raise RuntimeError(f"All candidate models failed. Last error: {last_error}")
-
-def _clean_markdown_output(output: str) -> str:
-    if output.startswith("```markdown"):
-        output = output[11:]
-    elif output.startswith("```"):
-        output = output[3:]
-    if output.endswith("```"):
-        output = output[:-3]
-    return output.strip()
+            return output.strip()
+        except Exception as e:
+            last_error = e
+            continue
+            
+    raise RuntimeError(f"All candidate models failed. Last error: {last_error}")
