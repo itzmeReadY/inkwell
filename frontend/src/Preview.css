@@ -1,0 +1,938 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Caveat:wght@400;500;600;700&family=Gochi+Hand&family=Kalam:wght@300;400;700&family=Reenie+Beanie&family=Shadows+Into+Light&family=Fira+Code:wght@400;500&display=swap');
+
+.paper {
+  position: relative;
+  min-height: 100%;
+  width: 100%;
+  padding: 36px 40px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow-y: auto;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  letter-spacing: 0.35px;
+}
+
+/* ==========================================================================
+   Handwriting Font Families - Enforced across all notes, headings, and math
+   ========================================================================== */
+.font-architect,
+.font-architect #inkwell-preview-content,
+.font-architect .content,
+.font-architect .content p,
+.font-architect .content li,
+.font-architect .content h1,
+.font-architect .content h2,
+.font-architect .content h3,
+.font-architect .content blockquote,
+.font-architect .freeform-text-box,
+.font-architect .direct-markdown-editor {
+  font-family: 'Architects Daughter', cursive, sans-serif !important;
+  font-size: 20px;
+  line-height: 1.65;
+}
+
+.font-kalam,
+.font-kalam #inkwell-preview-content,
+.font-kalam .content,
+.font-kalam .content p,
+.font-kalam .content li,
+.font-kalam .content h1,
+.font-kalam .content h2,
+.font-kalam .content h3,
+.font-kalam .content blockquote,
+.font-kalam .freeform-text-box,
+.font-kalam .direct-markdown-editor {
+  font-family: 'Kalam', cursive, sans-serif !important;
+  font-size: 21px;
+  line-height: 1.7;
+}
+
+.font-caveat,
+.font-caveat #inkwell-preview-content,
+.font-caveat .content,
+.font-caveat .content p,
+.font-caveat .content li,
+.font-caveat .content h1,
+.font-caveat .content h2,
+.font-caveat .content h3,
+.font-caveat .content blockquote,
+.font-caveat .freeform-text-box,
+.font-caveat .direct-markdown-editor {
+  font-family: 'Caveat', cursive, sans-serif !important;
+  font-size: 24px;
+  line-height: 1.55;
+}
+
+.font-shadows,
+.font-shadows #inkwell-preview-content,
+.font-shadows .content,
+.font-shadows .content p,
+.font-shadows .content li,
+.font-shadows .content h1,
+.font-shadows .content h2,
+.font-shadows .content h3,
+.font-shadows .content blockquote,
+.font-shadows .freeform-text-box,
+.font-shadows .direct-markdown-editor {
+  font-family: 'Shadows Into Light', cursive, sans-serif !important;
+  font-size: 22px;
+  line-height: 1.7;
+}
+
+.font-reenie,
+.font-reenie #inkwell-preview-content,
+.font-reenie .content,
+.font-reenie .content p,
+.font-reenie .content li,
+.font-reenie .content h1,
+.font-reenie .content h2,
+.font-reenie .content h3,
+.font-reenie .content blockquote,
+.font-reenie .freeform-text-box,
+.font-reenie .direct-markdown-editor {
+  font-family: 'Reenie Beanie', cursive, sans-serif !important;
+  font-size: 25px;
+  line-height: 1.85;
+}
+
+.font-gochi,
+.font-gochi #inkwell-preview-content,
+.font-gochi .content,
+.font-gochi .content p,
+.font-gochi .content li,
+.font-gochi .content h1,
+.font-gochi .content h2,
+.font-gochi .content h3,
+.font-gochi .content blockquote,
+.font-gochi .freeform-text-box,
+.font-gochi .direct-markdown-editor {
+  font-family: 'Gochi Hand', cursive, sans-serif !important;
+  font-size: 22px;
+  line-height: 1.7;
+}
+
+/* ==========================================================================
+   Themes: Minimal Grid, Dark Slate, Clean Dark, Dot Grid, Clean White
+   ========================================================================== */
+
+/* 1. Minimal Grid (Default) */
+.theme-grid {
+  background-color: #fafbfc;
+  background-image: 
+    linear-gradient(to right, rgba(99, 102, 241, 0.10) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.10) 1px, transparent 1px);
+  background-size: 22px 22px;
+  color: #1e293b;
+  border: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+.theme-grid h1, .theme-grid h2, .theme-grid h3 {
+  color: #0f172a;
+  padding-bottom: 4px;
+}
+
+.theme-grid .katex-display {
+  background: rgba(241, 245, 249, 0.85);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 8px;
+  padding: 12px 18px;
+}
+
+.theme-grid blockquote {
+  border-left: 4px solid #6366f1;
+  background: rgba(99, 102, 241, 0.05);
+  color: #334155;
+}
+
+/* 2. Dark Slate Grid */
+.theme-dark {
+  background-color: #0b0f19;
+  background-image: 
+    linear-gradient(to right, rgba(56, 189, 248, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.09) 1px, transparent 1px);
+  background-size: 22px 22px;
+  color: #f1f5f9;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.theme-dark h1, .theme-dark h2, .theme-dark h3 {
+  color: #38bdf8;
+  padding-bottom: 4px;
+}
+
+.theme-dark .katex {
+  color: #f8fafc;
+}
+
+.theme-dark .katex-display {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 8px;
+  padding: 12px 18px;
+}
+
+.theme-dark blockquote {
+  border-left: 4px solid #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+  color: #cbd5e1;
+}
+
+/* 3. Dark Clean (Solid Minimal Dark) */
+.theme-dark-clean {
+  background-color: #0f141c;
+  background-image: none;
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark-clean h1, .theme-dark-clean h2, .theme-dark-clean h3 {
+  color: #60a5fa;
+  padding-bottom: 4px;
+}
+
+.theme-dark-clean .katex {
+  color: #f8fafc;
+}
+
+.theme-dark-clean .katex-display {
+  background: #192231;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  border-radius: 8px;
+  padding: 12px 18px;
+}
+
+.theme-dark-clean blockquote {
+  border-left: 4px solid #60a5fa;
+  background: rgba(96, 165, 250, 0.08);
+  color: #cbd5e1;
+}
+
+/* 4. Dot Grid */
+.theme-dotgrid {
+  background-color: #ffffff;
+  background-image: radial-gradient(circle, rgba(71, 85, 105, 0.22) 1.2px, transparent 1.2px);
+  background-size: 20px 20px;
+  color: #1e293b;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.theme-dotgrid h1, .theme-dotgrid h2, .theme-dotgrid h3 {
+  color: #0f172a;
+  padding-bottom: 4px;
+}
+
+.theme-dotgrid .katex-display {
+  background: rgba(248, 250, 252, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 12px 18px;
+}
+
+.theme-dotgrid blockquote {
+  border-left: 4px solid #0284c7;
+  background: rgba(2, 132, 199, 0.05);
+  color: #334155;
+}
+
+/* 5. Clean White */
+.theme-clean {
+  background-color: #ffffff;
+  background-image: none;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+}
+
+.theme-clean h1, .theme-clean h2, .theme-clean h3 {
+  color: #0f172a;
+  padding-bottom: 4px;
+}
+
+.theme-clean .katex-display {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 18px;
+}
+
+.theme-clean blockquote {
+  border-left: 4px solid #64748b;
+  background: #f8fafc;
+  color: #334155;
+}
+
+/* ==========================================================================
+   Content Elements & Organic Handwriting Styling
+   ========================================================================== */
+.content {
+  position: relative;
+  z-index: 2;
+}
+
+.content h1 {
+  font-size: 34px;
+  margin-top: 8px;
+  margin-bottom: 14px;
+  transform: rotate(-0.35deg);
+  transform-origin: left center;
+}
+
+.content h2 {
+  font-size: 28px;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  transform: rotate(-0.25deg);
+  transform-origin: left center;
+}
+
+.content h3 {
+  font-size: 24px;
+  margin-top: 18px;
+  margin-bottom: 8px;
+}
+
+.content p {
+  margin: 12px 0;
+}
+
+.content ul, .content ol {
+  padding-left: 28px;
+  margin: 12px 0;
+}
+
+.content li {
+  margin: 6px 0;
+}
+
+.content blockquote {
+  margin: 16px 0;
+  padding: 10px 18px;
+  border-radius: 6px;
+  transform: rotate(0.15deg);
+}
+
+.content code {
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 0.85em;
+  background: rgba(125, 125, 125, 0.16);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.content pre code {
+  display: block;
+  padding: 14px;
+  overflow-x: auto;
+  border-radius: 6px;
+}
+
+.content .katex-display {
+  margin: 18px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Empty State */
+.empty-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.empty-placeholder {
+  max-width: 420px;
+  padding: 30px;
+  opacity: 0.75;
+}
+
+.empty-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.empty-placeholder h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.empty-placeholder p {
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Drawing Canvas Overlay & Interactive Annotation Tools
+   ========================================================================== */
+.paper {
+  position: relative;
+}
+
+.drawing-canvas-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+  border-radius: 0;
+}
+
+/* Authentic physical blending: multiply ink & highlighter onto light paper fibers */
+.theme-grid .drawing-canvas-overlay,
+.theme-clean .drawing-canvas-overlay,
+.theme-dotgrid .drawing-canvas-overlay {
+  mix-blend-mode: multiply;
+}
+
+.theme-dark .drawing-canvas-overlay,
+.theme-dark-clean .drawing-canvas-overlay {
+  mix-blend-mode: screen;
+}
+
+.drawing-canvas-overlay.drawing-active {
+  pointer-events: auto;
+  touch-action: none;
+  z-index: 25;
+}
+
+.drawing-canvas-overlay.tool-pen {
+  cursor: crosshair;
+}
+
+.drawing-canvas-overlay.tool-highlighter {
+  cursor: crosshair;
+}
+
+.drawing-canvas-overlay.tool-eraser {
+  cursor: crosshair;
+}
+
+/* ==========================================================================
+   Ultra-Modern Floating Annotation Palette (Apple / iPadOS / Linear style)
+   ========================================================================== */
+.drawing-toolbar-floating {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.tool-segment, .palette-segment, .size-segment, .action-segment {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.divider-v {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.14);
+  margin: 0 4px;
+}
+
+.tool-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 9999px;
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tool-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.tool-pill.active {
+  background: #38bdf8;
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+}
+
+.tool-pill.active .tool-icon {
+  stroke: #0f172a;
+}
+
+.tool-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.color-bubble {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.color-bubble:hover {
+  transform: scale(1.15);
+}
+
+.color-bubble.selected {
+  transform: scale(1.22);
+  border-color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.bubble-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.size-gauge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s;
+}
+
+.size-gauge:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.size-gauge.active {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.5);
+}
+
+.dot-fine { width: 4px; height: 4px; border-radius: 50%; background: #e2e8f0; }
+.dot-med { width: 7px; height: 7px; border-radius: 50%; background: #e2e8f0; }
+.dot-bold { width: 11px; height: 11px; border-radius: 50%; background: #e2e8f0; }
+
+.icon-action-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.icon-action-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.btn-done-pill {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 9999px;
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-done-pill:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #ffffff;
+}
+
+
+.draw-toggle-btn {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+}
+
+.draw-toggle-btn:hover {
+  background: rgba(56, 189, 248, 0.25) !important;
+}
+
+/* Multi-Page Navigation Bar */
+.page-navigation-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.page-indicator {
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+  padding: 0 4px;
+}
+
+.page-btn {
+  padding: 4px 8px;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.add-page-btn {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-page-btn:hover {
+  background: rgba(16, 185, 129, 0.25);
+}
+
+.delete-page-btn {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.delete-page-btn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+/* ==========================================================================
+   Freeform Canvas Text Layer (Type anywhere on canvas)
+   ========================================================================== */
+.text-box-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.text-box-layer.text-tool-active {
+  pointer-events: auto;
+  cursor: text;
+}
+.freeform-text-box {
+  position: absolute;
+  min-width: 60px;
+  max-width: 480px;
+  pointer-events: none;
+  user-select: text;
+  line-height: 1.4;
+  border-radius: 6px;
+  transition: box-shadow 0.15s, background-color 0.15s;
+}
+
+.freeform-text-box.annotating {
+  pointer-events: auto;
+}
+
+.freeform-text-box.annotating:hover {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
+}
+
+.freeform-text-box.editing {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 1.5px #38bdf8, 0 4px 12px rgba(0, 0, 0, 0.25);
+  z-index: 25;
+}
+
+.text-box-controls {
+  position: absolute;
+  top: -24px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  border-radius: 4px;
+  padding: 2px 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.freeform-text-box:hover .text-box-controls,
+.freeform-text-box.editing .text-box-controls {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.text-drag-handle {
+  cursor: grab;
+  font-size: 13px;
+  color: #94a3b8;
+  padding: 0 4px;
+  user-select: none;
+}
+
+.text-drag-handle:active {
+  cursor: grabbing;
+}
+
+.text-delete-btn {
+  background: transparent;
+  color: #f87171;
+  border: none;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.text-delete-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.text-box-editor {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  padding: 4px 6px;
+  box-sizing: border-box;
+}
+
+.text-box-display {
+  padding: 4px 6px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+}
+
+/* Ensure clean PDF export without editor handles */
+#multi-page-export-container .text-box-controls,
+#multi-page-export-container .drawing-toolbar-floating {
+  display: none !important;
+}
+
+#multi-page-export-container .freeform-text-box {
+  box-shadow: none !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* ==========================================================================
+   Note Layout Options: Single Column, Two Column (Cheat Sheet), Cornell
+   ========================================================================== */
+.layout-two-column #inkwell-preview-content,
+.layout-two-column .content {
+  column-count: 2;
+  column-gap: 36px;
+  column-rule: 1px dashed rgba(125, 125, 125, 0.28);
+}
+
+.layout-two-column #inkwell-preview-content h1,
+.layout-two-column .content h1 {
+  column-span: all;
+  padding-bottom: 8px;
+  margin-bottom: 18px;
+}
+
+.layout-two-column #inkwell-preview-content h2,
+.layout-two-column .content h2,
+.layout-two-column #inkwell-preview-content h3,
+.layout-two-column .content h3,
+.layout-two-column #inkwell-preview-content blockquote,
+.layout-two-column .content blockquote,
+.layout-two-column #inkwell-preview-content .katex-display,
+.layout-two-column .content .katex-display,
+.layout-two-column #inkwell-preview-content pre,
+.layout-two-column .content pre {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.layout-two-column #inkwell-preview-content .katex-display,
+.layout-two-column .content .katex-display {
+  padding: 8px 12px;
+  font-size: 0.9em;
+}
+
+/* Cornell Layout */
+.layout-cornell #inkwell-preview-content,
+.layout-cornell .content {
+  border-left: 3px solid #ef4444; /* Traditional red cue line */
+  padding-left: 28px;
+  margin-left: 14px;
+}
+
+/* ==========================================================================
+   Direct Markdown Editor & Switcher Styles
+   ========================================================================== */
+.paper-edit-toggle-btn {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  z-index: 30;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.paper-edit-toggle-btn:hover {
+  background: rgba(56, 189, 248, 0.2);
+  color: #ffffff;
+  border-color: #38bdf8;
+}
+
+.markdown-editor-container {
+  width: 100%;
+  min-height: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.markdown-editor-hint {
+  font-size: 13px;
+  color: #94a3b8;
+  font-style: italic;
+  padding-bottom: 8px;
+  
+}
+
+.direct-markdown-editor {
+  width: 100%;
+  min-height: 750px;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  border: none;
+  outline: none;
+  resize: none;
+  padding: 0;
+  white-space: pre-wrap;
+}
+
+/* ==========================================================================
+   Zero-Margin True Vector Print & PDF Styles
+   ========================================================================== */
+@page {
+  size: A4 portrait;
+  margin: 0 !important;
+}
+
+@media print {
+  html, body {
+    background: transparent !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  .header,
+  .left-pane,
+  .preview-pane-header,
+  .paper-edit-toggle-btn,
+  .drawing-toolbar-floating,
+  .text-box-controls,
+  .error-banner {
+    display: none !important;
+  }
+
+  .split-pane {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .pane.right-pane {
+    padding: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  .preview-container {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  .paper {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 40px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .drawing-canvas-overlay {
+    mix-blend-mode: multiply !important;
+  }
+}
