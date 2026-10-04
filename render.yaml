@@ -3,6 +3,7 @@ services:
   - type: web
     name: inkwell-api
     env: docker
+    plan: free
     repo: https://github.com/itzmeReadY/inkwell
     rootDir: backend
     dockerfilePath: ./Dockerfile
