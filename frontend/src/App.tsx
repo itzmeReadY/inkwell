@@ -94,7 +94,8 @@ function App() {
     setIsGenerating(true)
     setError(null)
     try {
-      const response = await fetch('http://localhost:8000/api/clean', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+      const response = await fetch(`${apiUrl}/api/clean`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -182,7 +183,8 @@ key takeaway: matrix powers can be computed easily via A^k = P * D^k * P^-1`
         }))
       };
 
-      const response = await fetch('http://localhost:8000/api/compile-pdf', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+      const response = await fetch(`${apiUrl}/api/compile-pdf`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

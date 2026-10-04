@@ -1,0 +1,28 @@
+services:
+  # 1. Backend API (Docker for Playwright dependencies)
+  - type: web
+    name: inkwell-api
+    env: docker
+    repo: https://github.com/itzmeReadY/inkwell
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+    autoDeploy: true
+
+  # 2. Frontend Static Site
+  - type: web
+    name: inkwell-frontend
+    env: static
+    repo: https://github.com/itzmeReadY/inkwell
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: inkwell-api
+          envVarKey: RENDER_EXTERNAL_URL
+    autoDeploy: true
