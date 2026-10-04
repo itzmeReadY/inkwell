@@ -4,6 +4,8 @@ import re
 
 # Gemma models hosted via Google AI Studio API with fast fallbacks
 CANDIDATE_MODELS = [
+    "gemma-4-31b-it",
+    "gemma-4-26b-a4b-it",
     "gemma-2-27b-it",
     "gemma-2-9b-it",
 ]

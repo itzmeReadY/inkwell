@@ -541,23 +541,29 @@
 .dot-med { width: 7px; height: 7px; border-radius: 50%; background: #e2e8f0; }
 .dot-bold { width: 11px; height: 11px; border-radius: 50%; background: #e2e8f0; }
 
-.icon-action-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
-  border: none;
-  color: #94a3b8;
+.action-pill {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 9999px;
+  background: transparent;
+  color: #94a3b8;
+  border: none;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.icon-action-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+.action-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
   color: #ffffff;
+}
+
+.action-pill.danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
 }
 
 .btn-done-pill {

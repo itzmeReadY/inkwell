@@ -53,7 +53,7 @@ With **Inkwell**, Alex simply pastes raw, frantic notes, picks a layout, and cli
 {% github https://github.com/itzmeReadY/inkwell %}
 
 ### Tech Stack
-- **AI Core:** Google Gemma 2 (`gemma-2-27b-it` / `gemma-2-9b-it`) open-weight models.
+- **AI Core:** Google Gemma open-weight models (`gemma-4-31b-it` / `gemma-4-26b-a4b-it` / `gemma-2-27b-it`).
 - **Backend:** FastAPI, Python 3.12, Playwright (for headless vector PDF rendering), Python-Markdown with KaTeX extensions.
 - **Frontend:** React 18, TypeScript, Vite, ReactMarkdown, Rehype-KaTeX, HTML5 Canvas annotation engine.
 - **License:** MIT License (100% open source).
@@ -63,7 +63,7 @@ With **Inkwell**, Alex simply pastes raw, frantic notes, picks a layout, and cli
 ## How I Built It
 
 ### 1. Powered by Google Gemma Open-Weight Models
-Inkwell is built specifically around Google's open-weight **Gemma 2** family (`gemma-2-27b-it` and `gemma-2-9b-it`). 
+Inkwell is built specifically around Google's open-weight **Gemma** family (`gemma-4-31b-it`, `gemma-4-26b-a4b-it`, and `gemma-2`). 
 
 We crafted a specialized STEM-instruct prompt in `llm.py` that instructs Gemma to:
 - Parse chaotic plain-text math notation (e.g. `lambda`, `alpha`, fractions like `a/b`, summations, and matrix rows) into valid $\LaTeX$ delimiters (`$...$` for inline, `$$...$$` for block math).
@@ -75,6 +75,8 @@ We crafted a specialized STEM-instruct prompt in `llm.py` that instructs Gemma t
 ```python
 # backend/llm.py excerpt
 CANDIDATE_MODELS = [
+    "gemma-4-31b-it",
+    "gemma-4-26b-a4b-it",
     "gemma-2-27b-it",
     "gemma-2-9b-it",
 ]
@@ -129,7 +131,7 @@ This project was built and iterated with the assistance of AI agent tooling:
 
 I am submitting Inkwell for the following categories:
 
-- **Featured Category: Gemma ($200)** — Inkwell is designed and built specifically around Google's open-weight Gemma models (`gemma-2-27b-it` and `gemma-2-9b-it`), harnessing their advanced reasoning and instruction-following to convert raw STEM lecture notes into clean Markdown and precise $\LaTeX$ math.
+- **Featured Category: Gemma ($200)** — Inkwell is designed and built specifically around Google's open-weight Gemma models (`gemma-4-31b-it`, `gemma-4-26b-a4b-it`, `gemma-2`), harnessing their advanced reasoning and instruction-following to convert raw STEM lecture notes into clean Markdown and precise $\LaTeX$ math.
 - **Overall Hacktoberfest Weekend Challenge: Build for a Friend ($250)** — Built specifically to solve Alex's real-world struggle with messy lecture notes, saving hours of manual $\LaTeX$ formatting every week.
 
 ---
