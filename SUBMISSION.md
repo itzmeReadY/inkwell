@@ -5,9 +5,9 @@
 I built **Inkwell** — an open-source, AI-powered tool that transforms messy, raw, plain-text lecture notes into publication-grade structured study guides and vector PDFs with precisely rendered mathematical formulas ($\LaTeX$ / KaTeX).
 
 ### Who I Built It For & The Problem
-I built Inkwell for my friend and study partner **Alex**, a third-year engineering and computer science student. 
+I built Inkwell for my friend and study partner **Asuna**, a third-year engineering and computer science student. 
 
-During dense STEM lectures like Linear Algebra, Differential Equations, and Machine Learning, professors talk and write at lightning speed. Alex types fast in plain text (Notepad or quick Markdown notes) to keep up:
+During dense STEM lectures like Linear Algebra, Differential Equations, and Machine Learning, professors talk and write at lightning speed. Asuna types fast in plain text (Notepad or quick Markdown notes) to keep up:
 ```text
 eigenvalues lecture:
 matrix A times vector v equals lambda v. A v = lambda v
@@ -17,10 +17,10 @@ trace is sum of diags, det is prod of lambdas
 remember: symmetric matrices always have real eigenvalues!
 ```
 
-By the time the lecture ends, the notes are an unstructured, chaotic wall of text. Shorthand formulas like `Av = lambda v` or `[[2,1],[1,2]]` are painful to review when studying for midterms. Alex used to spend **3 to 4 hours every weekend** manually converting notes into $\LaTeX$ or Notion formulas just to make them readable.
+By the time the lecture ends, the notes are an unstructured, chaotic wall of text. Shorthand formulas like `Av = lambda v` or `[[2,1],[1,2]]` are painful to review when studying for midterms. Asuna used to spend **3 to 4 hours every weekend** manually converting notes into $\LaTeX$ or Notion formulas just to make them readable.
 
 ### The Solution: Inkwell
-With **Inkwell**, Alex simply pastes raw, frantic notes, picks a layout, and clicks **"Clean & Format Notes"**:
+With **Inkwell**, Asuna simply pastes raw, frantic notes, picks a layout, and clicks **"Clean & Format Notes"**:
 1. **Instant Math Recognition:** Plain equations like `Av = lambda v` and raw matrices `[[2, 1], [1, 2]]` are automatically detected and converted into gorgeous KaTeX expressions:
    $$A \mathbf{v} = \lambda \mathbf{v}, \quad \det(A - \lambda I) = 0$$
    $$\begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}$$
@@ -28,7 +28,7 @@ With **Inkwell**, Alex simply pastes raw, frantic notes, picks a layout, and cli
    - **Single Page Document** for comprehensive reading
    - **Two-Column Cheat Sheet** for quick exam revision
    - **Cornell Notes** featuring cue questions, structured key takeaways, and summary blocks
-3. **Interactive Canvas & Pen Annotation:** Alex can draw freehand diagrams, highlight critical formulas, or drop movable sticky annotations directly over the rendered math.
+3. **Interactive Canvas & Pen Annotation:** Asuna can draw freehand diagrams, highlight critical formulas, or drop movable sticky annotations directly over the rendered math.
 4. **Vector PDF Compilation:** Headless rendering creates print-ready, crisp vector PDFs that preserve exact mathematical fonts and user annotations.
 
 ---
@@ -54,8 +54,9 @@ With **Inkwell**, Alex simply pastes raw, frantic notes, picks a layout, and cli
 
 ### Tech Stack
 - **AI Core:** Google Gemma open-weight models (`gemma-4-31b-it` / `gemma-4-26b-a4b-it` / `gemma-2-27b-it`).
-- **Backend:** FastAPI, Python 3.12, Playwright (for headless vector PDF rendering), Python-Markdown with KaTeX extensions.
+- **Backend:** FastAPI, Python, Playwright (for headless vector PDF rendering).
 - **Frontend:** React 18, TypeScript, Vite, ReactMarkdown, Rehype-KaTeX, HTML5 Canvas annotation engine.
+- **Hosting:** Render (Docker Web Service for the backend, Static Site for the frontend).
 - **License:** MIT License (100% open source).
 
 ---
@@ -100,7 +101,10 @@ Inkwell features an HTML5 canvas overlay (`DrawingCanvas.tsx` and `TextBoxLayer.
 - Movable, re-sizable text annotations that sit directly above the rendered KaTeX equations
 
 ### 4. Headless Vector PDF Engine
-Standard browser `window.print()` often produces rasterized or clipped math expressions. Inkwell uses a dedicated backend route (`/api/compile-pdf`) with Playwright to compile the styled HTML, KaTeX CSS, and canvas SVG/annotation layers into a multi-page, crisp vector PDF.
+Standard browser `window.print()` often produces rasterized or clipped math expressions. Inkwell uses a dedicated backend route (`/api/compile-pdf`) with Playwright to compile the final study guide into a multi-page, crisp vector PDF. To ensure the PDF is a 1:1 match with what the user sees, the React frontend serializes its live, KaTeX-rendered DOM and sends the raw HTML directly to the backend instead of re-parsing Markdown on the server.
+
+### 5. Putting it on Render
+Gemma does the thinking, and Render hosts the part people actually open. The frontend is deployed on Render as a Static Site, and the backend runs as a free Docker Web Service. Because Playwright requires heavy OS-level Chromium dependencies, using Render's Docker deployment allowed us to use Microsoft's official Playwright image so PDF generation works out of the box. Asuna (or anyone else) can use Inkwell from a link, with nothing to install and no setup before a study session.
 
 ---
 
@@ -131,9 +135,9 @@ This project was built and iterated with the assistance of AI agent tooling:
 
 I am submitting Inkwell for the following categories:
 
-- **Featured Category: Gemma ($200)** — Inkwell is designed and built specifically around Google's open-weight Gemma models (`gemma-4-31b-it`, `gemma-4-26b-a4b-it`, `gemma-2`), harnessing their advanced reasoning and instruction-following to convert raw STEM lecture notes into clean Markdown and precise $\LaTeX$ math.
-- **Overall Hacktoberfest Weekend Challenge: Build for a Friend ($250)** — Built specifically to solve Alex's real-world struggle with messy lecture notes, saving hours of manual $\LaTeX$ formatting every week.
-
+- **Best Use of Gemma:** Inkwell is built around Google's open-weight Gemma models, which turn raw STEM notes into clean Markdown and accurate LaTeX.
+- **Best Use of Render:** The entire Inkwell stack is deployed on Render. The frontend is a globally distributed static site, and the FastAPI backend uses a Render Docker Web Service to easily handle Playwright's system-level Chromium dependencies on the Free tier.
+- **Overall Hacktoberfest Weekend Challenge: Build for a Friend:** Built specifically to solve Asuna's real-world struggle with messy lecture notes, saving hours of manual LaTeX formatting every week.
 ---
 
 *Made with ❤️ for Hacktoberfest 2026.*
