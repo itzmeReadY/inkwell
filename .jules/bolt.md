@@ -1,0 +1,3 @@
+## 2024-10-06 - Unnecessary deep parsing in React Markdown
+**Learning:** Passing inline array literals to `remarkPlugins` and `rehypePlugins` in `react-markdown` causes new array references on every render, triggering deep re-evaluations and re-renders. Combined with heavy KaTeX rendering, this leads to significant performance bottlenecks, especially when the parent component re-renders frequently (e.g., from drawing mode changes).
+**Action:** Always extract plugin arrays to static constants outside the component and consider memoizing the `<ReactMarkdown>` element when the parent renders frequently but the markdown source text changes less often.
