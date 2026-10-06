@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
@@ -9,6 +9,9 @@ import type { DrawingCanvasHandle } from './DrawingCanvas'
 import type { ToolType } from './DrawingToolbar'
 import TextBoxLayer from './TextBoxLayer'
 import type { FreeformTextBox } from './TextBoxLayer'
+
+const REMARK_PLUGINS = [remarkMath]
+const REHYPE_PLUGINS = [rehypeKatex]
 
 interface PreviewProps {
   markdown: string
@@ -51,6 +54,17 @@ export default function Preview({
 
   // Map line width to font size for text tool (2px -> 18px, 4px -> 24px, 8px -> 32px)
   const activeFontSize = lineWidth === 2 ? 18 : lineWidth === 8 ? 32 : 24
+
+  const memoizedMarkdown = useMemo(() => {
+    return (
+      <ReactMarkdown
+        remarkPlugins={REMARK_PLUGINS}
+        rehypePlugins={REHYPE_PLUGINS}
+      >
+        {markdown}
+      </ReactMarkdown>
+    )
+  }, [markdown])
 
   if (!markdown && !isEditingMarkdown) {
     return (
@@ -104,12 +118,7 @@ export default function Preview({
         </div>
       ) : (
         <div className="content" id="inkwell-preview-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-          >
-            {markdown}
-          </ReactMarkdown>
+          {memoizedMarkdown}
         </div>
       )}
 
