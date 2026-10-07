@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, memo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
@@ -9,6 +9,17 @@ import type { DrawingCanvasHandle } from './DrawingCanvas'
 import type { ToolType } from './DrawingToolbar'
 import TextBoxLayer from './TextBoxLayer'
 import type { FreeformTextBox } from './TextBoxLayer'
+
+// ⚡ Bolt: Memoize the markdown rendering to prevent expensive re-renders
+// when doing UI interactions like drawing, changing tools, or moving text boxes
+const MemoizedMarkdown = memo(({ markdown }: { markdown: string }) => (
+  <ReactMarkdown
+    remarkPlugins={[remarkMath]}
+    rehypePlugins={[rehypeKatex]}
+  >
+    {markdown}
+  </ReactMarkdown>
+));
 
 interface PreviewProps {
   markdown: string
@@ -104,12 +115,7 @@ export default function Preview({
         </div>
       ) : (
         <div className="content" id="inkwell-preview-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-          >
-            {markdown}
-          </ReactMarkdown>
+          <MemoizedMarkdown markdown={markdown} />
         </div>
       )}
 
