@@ -194,7 +194,18 @@ async def export_compiled_pdf(request: CompilePdfRequest):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"PDF compilation failed: {str(e)}")
         
-    safe_filename = request.filename or f"inkwell-notes-{request.theme}.pdf"
+    if request.filename:
+        import os
+        # Prevent path traversal by keeping only the basename
+        safe_filename = os.path.basename(request.filename)
+        # Prevent HTTP Header Injection by stripping newlines, carriage returns, and quotes
+        safe_filename = safe_filename.replace('"', "").replace("\n", "").replace("\r", "")
+        # Fallback if the filename becomes empty after sanitization
+        if not safe_filename.strip():
+            safe_filename = f"inkwell-notes-{request.theme}.pdf"
+    else:
+        safe_filename = f"inkwell-notes-{request.theme}.pdf"
+
     if not safe_filename.endswith(".pdf"):
         safe_filename += ".pdf"
         
