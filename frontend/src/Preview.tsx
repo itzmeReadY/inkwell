@@ -10,6 +10,15 @@ import type { ToolType } from './DrawingToolbar'
 import TextBoxLayer from './TextBoxLayer'
 import type { FreeformTextBox } from './TextBoxLayer'
 
+// ⚡ Bolt: Define plugins outside component to prevent array recreation on every render.
+// This prevents expensive ReactMarkdown re-renders when other props (like drawing state) change,
+// or when typing in the plain text input (which updates the parent App component).
+const remarkPlugins = [remarkMath]
+const rehypePlugins = [rehypeKatex]
+
+// ⚡ Bolt: Memoize the markdown component to skip re-renders if markdown content hasn't changed.
+const MemoizedMarkdown = React.memo(ReactMarkdown)
+
 interface PreviewProps {
   markdown: string
   theme: string
@@ -104,12 +113,12 @@ export default function Preview({
         </div>
       ) : (
         <div className="content" id="inkwell-preview-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
+          <MemoizedMarkdown
+            remarkPlugins={remarkPlugins}
+            rehypePlugins={rehypePlugins}
           >
             {markdown}
-          </ReactMarkdown>
+          </MemoizedMarkdown>
         </div>
       )}
 
