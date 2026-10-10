@@ -10,6 +10,16 @@ import type { ToolType } from './DrawingToolbar'
 import TextBoxLayer from './TextBoxLayer'
 import type { FreeformTextBox } from './TextBoxLayer'
 
+// ⚡ Bolt: Memoize plugins and ReactMarkdown component to prevent unnecessary re-rendering
+// Creating arrays inline like `remarkPlugins={[remarkMath]}` breaks memoization in ReactMarkdown
+// causing the entire KaTeX math tree to be re-parsed on every keystroke in the left editor
+const REMARK_PLUGINS = [remarkMath] as any;
+const REHYPE_PLUGINS = [rehypeKatex] as any;
+
+const MemoizedMarkdown = React.memo(({ markdown }: { markdown: string }) => (
+  <ReactMarkdown remarkPlugins={REMARK_PLUGINS} rehypePlugins={REHYPE_PLUGINS}>{markdown}</ReactMarkdown>
+));
+
 interface PreviewProps {
   markdown: string
   theme: string
@@ -104,12 +114,7 @@ export default function Preview({
         </div>
       ) : (
         <div className="content" id="inkwell-preview-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-          >
-            {markdown}
-          </ReactMarkdown>
+          <MemoizedMarkdown markdown={markdown} />
         </div>
       )}
 
