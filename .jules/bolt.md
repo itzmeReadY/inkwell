@@ -1,0 +1,3 @@
+## 2023-10-24 - ReactMarkdown Inline Array Bottleneck
+**Learning:** Passing inline arrays like `remarkPlugins={[remarkMath]}` to ReactMarkdown causes the entire component (and its expensive KaTeX math tree) to re-parse and re-render every time the parent re-renders. Since `App` re-renders on every keystroke in the raw text editor, this leads to significant lag when editing alongside a long formatted preview.
+**Action:** Always define plugin arrays for ReactMarkdown outside the component or use `useMemo`, and memoize the ReactMarkdown component itself using `React.memo` to skip re-renders when the markdown string hasn't changed.
