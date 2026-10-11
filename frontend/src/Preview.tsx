@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
@@ -48,6 +48,23 @@ export default function Preview({
   onToggleEditMarkdown = () => {}
 }: PreviewProps) {
   const paperRef = useRef<HTMLDivElement | null>(null)
+
+  // Extract static arrays outside the render function to maintain stable references.
+  // This avoids passing a new array reference on every render, which triggers
+  // expensive re-evaluations inside ReactMarkdown.
+  const remarkPlugins = useMemo(() => [remarkMath], [])
+  const rehypePlugins = useMemo(() => [rehypeKatex], [])
+
+  const memoizedReactMarkdown = useMemo(() => {
+    return (
+      <ReactMarkdown
+        remarkPlugins={remarkPlugins}
+        rehypePlugins={rehypePlugins}
+      >
+        {markdown}
+      </ReactMarkdown>
+    )
+  }, [markdown, remarkPlugins, rehypePlugins])
 
   // Map line width to font size for text tool (2px -> 18px, 4px -> 24px, 8px -> 32px)
   const activeFontSize = lineWidth === 2 ? 18 : lineWidth === 8 ? 32 : 24
@@ -104,12 +121,7 @@ export default function Preview({
         </div>
       ) : (
         <div className="content" id="inkwell-preview-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-          >
-            {markdown}
-          </ReactMarkdown>
+          {memoizedReactMarkdown}
         </div>
       )}
 
