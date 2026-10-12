@@ -1,0 +1,4 @@
+## 2024-05-18 - SSRF and Local File Read in PDF Compiler
+**Vulnerability:** The `/api/compile-pdf` endpoint uses Playwright to render user-controlled HTML strings. Attackers could embed malicious tags like `<iframe src="file:///etc/passwd">` or use `fetch()` scripts to access internal metadata services (e.g., `http://169.254.169.254/...`). Playwright executes this content with full capabilities, leaking internal network data or local files into the rendered PDF.
+**Learning:** When using headless browsers (Playwright, Puppeteer) to convert user HTML to PDF, the browser engine executes with high privilege. Disabling Javascript or passing headless options isn't enough; the browser's network layer must be explicitly restricted.
+**Prevention:** Implement an explicit request interception layer using `page.route("**/*", handler)` to block all network requests except for a strictly defined allowlist (e.g., `about:blank`, `data:` URIs, and trusted CDNs for fonts/styles).
