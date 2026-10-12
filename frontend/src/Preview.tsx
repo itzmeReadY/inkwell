@@ -29,6 +29,16 @@ interface PreviewProps {
   onToggleEditMarkdown?: () => void
 }
 
+// Memoize the expensive markdown + math rendering so it only updates when the markdown text changes
+const MemoizedMarkdown = React.memo(({ content }: { content: string }) => (
+  <ReactMarkdown
+    remarkPlugins={[remarkMath]}
+    rehypePlugins={[rehypeKatex]}
+  >
+    {content}
+  </ReactMarkdown>
+));
+
 export default function Preview({
   markdown,
   theme,
@@ -104,12 +114,7 @@ export default function Preview({
         </div>
       ) : (
         <div className="content" id="inkwell-preview-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-          >
-            {markdown}
-          </ReactMarkdown>
+          <MemoizedMarkdown content={markdown} />
         </div>
       )}
 
