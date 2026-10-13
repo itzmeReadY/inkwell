@@ -1,0 +1,4 @@
+## 2023-10-13 - Prevent SSRF and LFI in Playwright PDF Generation
+**Vulnerability:** The Playwright instance used to generate PDFs from user-controlled HTML (`backend/pdf_compiler.py`) had unrestricted network access. This allowed an attacker to include arbitrary URLs or local file paths (e.g., `<img src="file:///etc/passwd">` or internal service URLs) in their input, which the headless browser would fetch, leading to Server-Side Request Forgery (SSRF) and Local File Inclusion (LFI).
+**Learning:** Headless browsers running on the server to process user input act as confused deputies. Without explicit network layer restrictions, they can be weaponized to access sensitive internal resources or local files.
+**Prevention:** Always use `page.route` with a strict allowlist (e.g., only permitting specific CDNs and `data:` URIs) when rendering user-supplied HTML via headless browsers to prevent unauthorized data access.

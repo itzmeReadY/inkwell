@@ -439,6 +439,21 @@ async def compile_html_to_pdf(
         # Launch Chromium. It handles downloading its own browser on first run.
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page()
+
+        # Security: explicitly restrict network requests to prevent SSRF and LFI
+        async def restrict_network(route):
+            url = route.request.url
+            if url.startswith("data:"):
+                await route.continue_()
+            elif url.startswith("https://cdn.jsdelivr.net/") or \
+                 url.startswith("https://fonts.googleapis.com/") or \
+                 url.startswith("https://fonts.gstatic.com/"):
+                await route.continue_()
+            else:
+                await route.abort()
+
+        await page.route("**/*", restrict_network)
+
         await page.set_content(html_content, wait_until="networkidle")
         pdf_bytes = await page.pdf(
             format="A4",
