@@ -10,6 +10,22 @@ import type { ToolType } from './DrawingToolbar'
 import TextBoxLayer from './TextBoxLayer'
 import type { FreeformTextBox } from './TextBoxLayer'
 
+// Memoized Markdown renderer to prevent computationally expensive KaTeX rendering
+// when unrelated state (like drawing tools or plain text input) changes.
+const remarkPluginsList = [remarkMath]
+const rehypePluginsList = [rehypeKatex]
+
+const MemoizedMarkdown = React.memo(({ markdown }: { markdown: string }) => {
+  return (
+    <ReactMarkdown
+      remarkPlugins={remarkPluginsList}
+      rehypePlugins={rehypePluginsList as any}
+    >
+      {markdown}
+    </ReactMarkdown>
+  )
+})
+
 interface PreviewProps {
   markdown: string
   theme: string
@@ -104,12 +120,7 @@ export default function Preview({
         </div>
       ) : (
         <div className="content" id="inkwell-preview-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-          >
-            {markdown}
-          </ReactMarkdown>
+          <MemoizedMarkdown markdown={markdown} />
         </div>
       )}
 
