@@ -1,0 +1,4 @@
+## 2024-10-14 - Playwright SSRF and LFI in Headless PDF Generation
+**Vulnerability:** Playwright instances rendering user-controlled HTML to PDF can make outgoing network requests. Malicious `<iframe>`, `<img src="file:///...">`, or `<img src="http://169.254.169.254">` tags can result in Server-Side Request Forgery (SSRF) and Local File Inclusion (LFI).
+**Learning:** Headless browsers trust all network requests by default. If the browser generates a PDF from HTML that a user can manipulate or inject content into, these network requests can exfiltrate sensitive local files or internal metadata.
+**Prevention:** Always restrict the browser's network layer using Playwright's `page.route` interceptor. Only allow explicitly needed domains (like specific CDNs) and data URIs, while blocking everything else with `route.abort()`.
