@@ -5,8 +5,47 @@ Works seamlessly across Windows, Mac, Linux, and Render.
 """
 import tempfile
 import asyncio
+import urllib.parse
 from pathlib import Path
 from playwright.async_api import async_playwright
+
+import ipaddress
+
+async def block_unsafe_routes(route):
+    """
+    Security interceptor to prevent Server-Side Request Forgery (SSRF)
+    and Local File Inclusion (LFI). Allows external HTTP/HTTPS requests
+    but strictly blocks file:// schemes and private/local/link-local IP addresses.
+    """
+    url = route.request.url
+    parsed = urllib.parse.urlparse(url)
+
+    # Always allow data: URLs
+    if parsed.scheme == "data":
+        return await route.continue_()
+
+    # Block non-HTTP(S) schemes (like file://, ftp://, etc.)
+    if parsed.scheme not in ["http", "https"]:
+        return await route.abort()
+
+    hostname = parsed.hostname
+    if not hostname:
+        return await route.abort()
+
+    # Block obvious localhosts
+    if hostname.lower() in ["localhost", "127.0.0.1", "::1"]:
+        return await route.abort()
+
+    # Block private, loopback, and link-local (e.g. AWS metadata) IPs
+    try:
+        ip = ipaddress.ip_address(hostname)
+        if ip.is_private or ip.is_loopback or ip.is_link_local:
+            return await route.abort()
+    except ValueError:
+        # Not an IP address string, which is fine
+        pass
+
+    return await route.continue_()
 
 # ─── Theme CSS (maps to frontend themes) ───────────────────────────────────────
 
@@ -439,6 +478,10 @@ async def compile_html_to_pdf(
         # Launch Chromium. It handles downloading its own browser on first run.
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page()
+
+        # 🛡️ Apply security interceptor to restrict network layer
+        await page.route("**/*", block_unsafe_routes)
+
         await page.set_content(html_content, wait_until="networkidle")
         pdf_bytes = await page.pdf(
             format="A4",
