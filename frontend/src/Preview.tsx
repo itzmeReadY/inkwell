@@ -10,6 +10,24 @@ import type { ToolType } from './DrawingToolbar'
 import TextBoxLayer from './TextBoxLayer'
 import type { FreeformTextBox } from './TextBoxLayer'
 
+// Define plugins outside component to maintain stable reference
+// This prevents unnecessary re-renders of the computationally expensive Markdown/LaTeX tree
+const remarkPluginsList = [remarkMath]
+const rehypePluginsList = [rehypeKatex]
+
+// Memoize the markdown renderer to avoid expensive re-parsing
+// when unrelated state (like drawing tools or colors) changes in the parent
+const MemoizedMarkdown = React.memo(({ children }: { children: string }) => {
+  return (
+    <ReactMarkdown
+      remarkPlugins={remarkPluginsList as any}
+      rehypePlugins={rehypePluginsList as any}
+    >
+      {children}
+    </ReactMarkdown>
+  )
+})
+
 interface PreviewProps {
   markdown: string
   theme: string
@@ -104,12 +122,7 @@ export default function Preview({
         </div>
       ) : (
         <div className="content" id="inkwell-preview-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-          >
-            {markdown}
-          </ReactMarkdown>
+          <MemoizedMarkdown>{markdown}</MemoizedMarkdown>
         </div>
       )}
 
