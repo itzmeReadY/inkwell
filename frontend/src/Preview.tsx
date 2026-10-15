@@ -29,6 +29,20 @@ interface PreviewProps {
   onToggleEditMarkdown?: () => void
 }
 
+// Define plugin arrays outside the component to prevent array identity changes on every render.
+const remarkPlugins = [remarkMath]
+const rehypePlugins = [rehypeKatex]
+
+// Memoize the markdown renderer since markdown parsing and math typesetting is expensive.
+const MemoizedMarkdown = React.memo(({ markdown }: { markdown: string }) => (
+  <ReactMarkdown
+    remarkPlugins={remarkPlugins}
+    rehypePlugins={rehypePlugins}
+  >
+    {markdown}
+  </ReactMarkdown>
+))
+
 export default function Preview({
   markdown,
   theme,
@@ -104,12 +118,7 @@ export default function Preview({
         </div>
       ) : (
         <div className="content" id="inkwell-preview-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-          >
-            {markdown}
-          </ReactMarkdown>
+          <MemoizedMarkdown markdown={markdown} />
         </div>
       )}
 
