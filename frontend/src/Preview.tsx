@@ -9,6 +9,21 @@ import type { DrawingCanvasHandle } from './DrawingCanvas'
 import type { ToolType } from './DrawingToolbar'
 import TextBoxLayer from './TextBoxLayer'
 import type { FreeformTextBox } from './TextBoxLayer'
+import type { PluggableList } from 'unified'
+
+const REMARK_PLUGINS: PluggableList = [remarkMath]
+const REHYPE_PLUGINS: PluggableList = [rehypeKatex]
+
+const MemoizedMarkdown = React.memo(({ markdown }: { markdown: string }) => {
+  return (
+    <ReactMarkdown
+      remarkPlugins={REMARK_PLUGINS}
+      rehypePlugins={REHYPE_PLUGINS}
+    >
+      {markdown}
+    </ReactMarkdown>
+  )
+})
 
 interface PreviewProps {
   markdown: string
@@ -104,12 +119,7 @@ export default function Preview({
         </div>
       ) : (
         <div className="content" id="inkwell-preview-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-          >
-            {markdown}
-          </ReactMarkdown>
+          <MemoizedMarkdown markdown={markdown} />
         </div>
       )}
 
