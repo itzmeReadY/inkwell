@@ -1,0 +1,4 @@
+## 2024-10-24 - SSRF and LFI in Headless Browser PDF Generation
+**Vulnerability:** The application used Playwright to convert HTML to PDF without restricting the headless browser's network layer. This allowed malicious user input to include references to local files (e.g., `<img src="file:///etc/passwd" />`) or internal network services, causing the server to fetch and include them in the generated PDF.
+**Learning:** Headless browsers automatically fetch resources like a regular browser, making them vulnerable to Server-Side Request Forgery (SSRF) and Local File Inclusion (LFI) if they render user-controlled content.
+**Prevention:** Always explicitly restrict the network layer of headless browsers (e.g., using `page.route` in Playwright) to an explicit allowlist of required domains and protocols when rendering user-controlled content.
