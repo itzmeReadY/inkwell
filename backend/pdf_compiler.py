@@ -6,6 +6,7 @@ Works seamlessly across Windows, Mac, Linux, and Render.
 import tempfile
 import asyncio
 from pathlib import Path
+from urllib.parse import urlparse
 from playwright.async_api import async_playwright
 
 # ─── Theme CSS (maps to frontend themes) ───────────────────────────────────────
@@ -439,6 +440,19 @@ async def compile_html_to_pdf(
         # Launch Chromium. It handles downloading its own browser on first run.
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page()
+
+        async def route_handler(route, request):
+            parsed_url = urlparse(request.url)
+            allowed_hosts = {"cdn.jsdelivr.net", "fonts.googleapis.com", "fonts.gstatic.com"}
+            if parsed_url.scheme == "data":
+                await route.continue_()
+            elif parsed_url.netloc in allowed_hosts:
+                await route.continue_()
+            else:
+                await route.abort()
+
+        await page.route("**/*", route_handler)
+
         await page.set_content(html_content, wait_until="networkidle")
         pdf_bytes = await page.pdf(
             format="A4",
