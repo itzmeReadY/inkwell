@@ -10,6 +10,21 @@ import type { ToolType } from './DrawingToolbar'
 import TextBoxLayer from './TextBoxLayer'
 import type { FreeformTextBox } from './TextBoxLayer'
 
+// ⚡ Bolt: Define plugins outside component to prevent array identity changes from breaking memoization
+const remarkPlugins = [remarkMath]
+const rehypePlugins = [rehypeKatex]
+
+// ⚡ Bolt: Memoize the computationally expensive Markdown/LaTeX rendering
+// This prevents lag during typing or when unrelated state (like drawing tools) changes
+const MemoizedMarkdown = React.memo(({ markdown }: { markdown: string }) => (
+  <ReactMarkdown
+    remarkPlugins={remarkPlugins as any}
+    rehypePlugins={rehypePlugins as any}
+  >
+    {markdown}
+  </ReactMarkdown>
+))
+
 interface PreviewProps {
   markdown: string
   theme: string
@@ -104,12 +119,7 @@ export default function Preview({
         </div>
       ) : (
         <div className="content" id="inkwell-preview-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-          >
-            {markdown}
-          </ReactMarkdown>
+          <MemoizedMarkdown markdown={markdown} />
         </div>
       )}
 

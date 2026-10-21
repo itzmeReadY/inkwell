@@ -1,0 +1,3 @@
+## 2024-03-24 - React-Markdown Array Identity Breaking Memoization
+**Learning:** Creating array props directly in render (like `remarkPlugins={[remarkMath]}`) breaks component memoization because a new array identity is created on every render. This was causing computationally expensive Markdown and LaTeX (KaTeX) re-renders in `Preview.tsx` whenever unrelated states (like drawing tools, color, or layout) changed, causing UI lag.
+**Action:** Always define plugin arrays or static configuration objects outside the React component, and explicitly wrap heavy components like `ReactMarkdown` in `React.memo()` if they only depend on specific props like the source string.
