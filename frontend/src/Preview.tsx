@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, memo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
@@ -9,6 +9,20 @@ import type { DrawingCanvasHandle } from './DrawingCanvas'
 import type { ToolType } from './DrawingToolbar'
 import TextBoxLayer from './TextBoxLayer'
 import type { FreeformTextBox } from './TextBoxLayer'
+
+// Define plugins outside to prevent array identity changes during re-renders
+const remarkPlugins = [remarkMath]
+const rehypePlugins = [rehypeKatex]
+
+// Memoize the computationally expensive Markdown/LaTeX rendering
+const MemoizedMarkdown = memo(({ children }: { children: string }) => (
+  <ReactMarkdown
+    remarkPlugins={remarkPlugins}
+    rehypePlugins={rehypePlugins}
+  >
+    {children}
+  </ReactMarkdown>
+))
 
 interface PreviewProps {
   markdown: string
@@ -104,12 +118,9 @@ export default function Preview({
         </div>
       ) : (
         <div className="content" id="inkwell-preview-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-          >
+          <MemoizedMarkdown>
             {markdown}
-          </ReactMarkdown>
+          </MemoizedMarkdown>
         </div>
       )}
 
