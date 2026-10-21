@@ -10,6 +10,19 @@ import type { ToolType } from './DrawingToolbar'
 import TextBoxLayer from './TextBoxLayer'
 import type { FreeformTextBox } from './TextBoxLayer'
 
+// Memoized Markdown component to prevent expensive re-renders when drawing props change
+const remarkPlugins = [remarkMath]
+const rehypePlugins = [rehypeKatex]
+
+const MemoizedMarkdown = React.memo(({ markdown }: { markdown: string }) => (
+  <ReactMarkdown
+    remarkPlugins={remarkPlugins as any}
+    rehypePlugins={rehypePlugins as any}
+  >
+    {markdown}
+  </ReactMarkdown>
+))
+
 interface PreviewProps {
   markdown: string
   theme: string
@@ -104,12 +117,7 @@ export default function Preview({
         </div>
       ) : (
         <div className="content" id="inkwell-preview-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-          >
-            {markdown}
-          </ReactMarkdown>
+          <MemoizedMarkdown markdown={markdown} />
         </div>
       )}
 
