@@ -6,6 +6,7 @@ Works seamlessly across Windows, Mac, Linux, and Render.
 import tempfile
 import asyncio
 import urllib.parse
+import html
 from pathlib import Path
 from playwright.async_api import async_playwright
 
@@ -240,11 +241,13 @@ def _build_textbox_html(textboxes: list | None) -> str:
     for box in textboxes:
         if not box or not box.get("text"):
             continue
-        x = box.get("x", 0)
-        y = box.get("y", 0)
-        color = box.get("color", "#1e293b")
-        font_size = box.get("fontSize", 20)
-        text = box.get("text", "")
+        # Ensure coordinates are floats (or escaped) to prevent attribute breakout XSS
+        x = float(box.get("x", 0))
+        y = float(box.get("y", 0))
+        # Escape user input to prevent XSS in the PDF compiler's Playwright browser
+        color = html.escape(str(box.get("color", "#1e293b")))
+        font_size = html.escape(str(box.get("fontSize", 20)))
+        text = html.escape(box.get("text", ""))
         parts.append(
             f'<div class="text-annotation" style="'
             f'left:{x}px;top:{y}px;color:{color};font-size:{font_size}px;'
