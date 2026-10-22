@@ -43,7 +43,7 @@ interface PreviewProps {
   onToggleEditMarkdown?: () => void
 }
 
-export default function Preview({
+export default memo(function Preview({
   markdown,
   theme,
   font,
@@ -152,4 +152,4 @@ export default function Preview({
       )}
     </div>
   )
-}
+})
