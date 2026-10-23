@@ -1,4 +1,4 @@
-## 2024-10-24 - SSRF in Headless Chromium Playwright PDF Generation
-**Vulnerability:** The Playwright browser rendering used to generate PDF from user-provided HTML did not restrict outgoing network requests, leading to Server-Side Request Forgery (SSRF) and Local File Inclusion (LFI).
-**Learning:** Even when Chromium is running headless to convert HTML to PDF, user-controlled HTML (e.g. `img` tags or CSS URLs) can cause the browser to make arbitrary network or local filesystem requests unless strictly intercepted and validated.
-**Prevention:** Always restrict the network layer by adding a strict `page.route` network interceptor. Use `urllib.parse.urlparse` for URL validation instead of simple string matching, explicitly allowing safe protocols (like `data:`) and trusted hostnames (like `cdn.jsdelivr.net`), while aborting everything else.
+## 2024-10-23 - Prevent SSRF by validating URL hostname, not netloc
+**Vulnerability:** The application was using `urllib.parse.urlparse(url).netloc` to validate allowed URLs for Playwright rendering, which was susceptible to Server-Side Request Forgery (SSRF).
+**Learning:** `urllib.parse.urlparse(url).netloc` includes basic authentication credentials (e.g., `user:pass@host:port`), meaning an attacker can construct a URL like `http://cdn.jsdelivr.net@127.0.0.1:8080/` which bypasses the check because the netloc string evaluates to `cdn.jsdelivr.net@127.0.0.1:8080` (or `cdn.jsdelivr.net` with certain parsing quirks if malformed), while the browser attempts to connect to `127.0.0.1`.
+**Prevention:** Always use `urllib.parse.urlparse(url).hostname` when validating URLs against an allowlist, as this properly extracts only the host portion and ignores any credentials or ports.
