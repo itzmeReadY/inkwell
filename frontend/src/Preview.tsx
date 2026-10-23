@@ -1,4 +1,4 @@
-import React, { useRef, memo } from 'react'
+import React, { useRef, memo, useDeferredValue } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
@@ -43,7 +43,10 @@ interface PreviewProps {
   onToggleEditMarkdown?: () => void
 }
 
-export default function Preview({
+const EMPTY_TEXT_BOXES: FreeformTextBox[] = []
+const NOOP = () => {}
+
+export default memo(function Preview({
   markdown,
   theme,
   font,
@@ -55,13 +58,15 @@ export default function Preview({
   drawingDataUrl,
   onSaveDrawing,
   canvasRef,
-  textBoxes = [],
-  onUpdateTextBoxes = () => {},
+  textBoxes = EMPTY_TEXT_BOXES,
+  onUpdateTextBoxes = NOOP,
   isEditingMarkdown = false,
-  onUpdateMarkdown = () => {},
-  onToggleEditMarkdown = () => {}
+  onUpdateMarkdown = NOOP,
+  onToggleEditMarkdown = NOOP
 }: PreviewProps) {
   const paperRef = useRef<HTMLDivElement | null>(null)
+
+  const deferredMarkdown = useDeferredValue(markdown)
 
   // Map line width to font size for text tool (2px -> 18px, 4px -> 24px, 8px -> 32px)
   const activeFontSize = lineWidth === 2 ? 18 : lineWidth === 8 ? 32 : 24
@@ -119,7 +124,7 @@ export default function Preview({
       ) : (
         <div className="content" id="inkwell-preview-content">
           <MemoizedMarkdown>
-            {markdown}
+            {deferredMarkdown}
           </MemoizedMarkdown>
         </div>
       )}
@@ -152,4 +157,4 @@ export default function Preview({
       )}
     </div>
   )
-}
+})

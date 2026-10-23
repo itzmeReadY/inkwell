@@ -1,0 +1,5 @@
+## 2024-05-15 - React Parent Component State Re-renders
+
+**Learning:** Tying text input state (updated per keystroke) to a top-level parent component (`App.tsx`) that also renders computationally expensive children (like the Markdown/LaTeX `Preview`) causes severe typing lag. The parent re-renders on every keystroke, forcing all children to re-render unless they are perfectly memoized. Furthermore, when directly editing the Markdown, updating the Markdown prop on every keystroke forces the expensive ReactMarkdown render tree to recalculate synchronously, freezing the UI.
+
+**Action:** Ensure computationally expensive children (like `Preview`) are wrapped in `React.memo()`, and strictly manage all props passed to them. Use `useCallback` for functions, `useMemo` for derived data, and extract static default props (like `[]` or `() => {}`) outside the component to guarantee stable references and prevent unnecessary re-renders. Use `useDeferredValue` for expensive string props (like `markdown`) so that React can prioritize user input events over computationally heavy UI updates.
