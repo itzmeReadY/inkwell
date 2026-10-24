@@ -1,0 +1,4 @@
+
+## 2024-05-18 - React.memo Identity Checks for Complex Components
+**Learning:** Typing lag in an application can be caused by continuous re-renders of a root component (like App) propagating down to expensive child components (like an un-memoized Preview component which does computationally heavy Markdown/LaTeX rendering). Even if child props appear structurally identical, inline array definitions or inline arrow functions passed as props cause referential inequality, breaking React's automatic bailout and forcing the expensive child to re-render on every keystroke.
+**Action:** When dealing with computationally expensive components, wrap them in `React.memo` and strictly verify that all array and function props passed to them maintain stable references across renders (using `useCallback`, `useMemo`, or moving constants outside the component).
