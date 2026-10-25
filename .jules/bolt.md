@@ -1,0 +1,3 @@
+## 2024-10-25 - React Performance in Complex State Trees
+**Learning:** In a React application managing a complex document state (multiple pages with Markdown, textboxes, and drawings), passing inline functions (like `(md) => updateCurrentPage({ markdown: md })`) to child components (like `Preview`) can trigger cascading and unnecessary re-renders. This is especially true if the child component holds large un-memoized structures or when state updates occur frequently (e.g. typing in a textbox).
+**Action:** Always wrap state setter handlers (e.g. `handleUpdateMarkdown`, `handleToggleEditMarkdown`) with `useCallback` when passing them down as props to heavy components.
