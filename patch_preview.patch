@@ -1,0 +1,27 @@
+--- frontend/src/Preview.tsx
++++ frontend/src/Preview.tsx
+@@ -43,7 +43,7 @@
+   onToggleEditMarkdown?: () => void
+ }
+
+-export default function Preview({
++const Preview = memo(function Preview({
+   markdown,
+   theme,
+   font,
+@@ -62,7 +62,7 @@
+   isEditingMarkdown = false,
+   onUpdateMarkdown = () => {},
+   onToggleEditMarkdown = () => {}
+-}: PreviewProps) {
++}: PreviewProps) {
+   const paperRef = useRef<HTMLDivElement | null>(null)
+
+   // Map line width to font size for text tool (2px -> 18px, 4px -> 24px, 8px -> 32px)
+@@ -148,3 +148,5 @@
+     </div>
+   )
+-}
++})
++
++export default Preview

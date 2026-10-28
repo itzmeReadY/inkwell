@@ -1,0 +1,15 @@
+--- frontend/src/App.tsx
++++ frontend/src/App.tsx
+@@ -410,9 +410,9 @@
+               drawingDataUrl={currentPage.drawingDataUrl}
+               onSaveDrawing={handleSaveDrawing}
+               canvasRef={canvasRef}
+-              textBoxes={currentPage.textBoxes || []}
++              textBoxes={currentPage.textBoxes || EMPTY_ARRAY}
+               onUpdateTextBoxes={handleUpdateTextBoxes}
+               isEditingMarkdown={isEditingMarkdown}
+-              onUpdateMarkdown={(md) => updateCurrentPage({ markdown: md })}
+-              onToggleEditMarkdown={() => setIsEditingMarkdown(!isEditingMarkdown)}
++              onUpdateMarkdown={handleUpdateMarkdown}
++              onToggleEditMarkdown={handleToggleEditMarkdown}
+             />
