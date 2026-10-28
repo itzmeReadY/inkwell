@@ -1,0 +1,17 @@
+--- frontend/src/App.tsx
++++ frontend/src/App.tsx
+@@ -1,4 +1,4 @@
+-import { useState, useRef } from 'react'
++import { useState, useRef, useCallback } from 'react'
+
+ import 'katex/dist/katex.min.css'
+ import Preview from './Preview'
+@@ -18,6 +18,8 @@
+   textBoxes?: FreeformTextBox[]
+ }
+
++const EMPTY_ARRAY: FreeformTextBox[] = []
++
+ function App() {
+   // Multi-page state
+   const [pages, setPages] = useState<NotePage[]>([
