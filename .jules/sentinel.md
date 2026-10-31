@@ -2,3 +2,8 @@
 **Vulnerability:** The Playwright browser rendering used to generate PDF from user-provided HTML did not restrict outgoing network requests, leading to Server-Side Request Forgery (SSRF) and Local File Inclusion (LFI).
 **Learning:** Even when Chromium is running headless to convert HTML to PDF, user-controlled HTML (e.g. `img` tags or CSS URLs) can cause the browser to make arbitrary network or local filesystem requests unless strictly intercepted and validated.
 **Prevention:** Always restrict the network layer by adding a strict `page.route` network interceptor. Use `urllib.parse.urlparse` for URL validation instead of simple string matching, explicitly allowing safe protocols (like `data:`) and trusted hostnames (like `cdn.jsdelivr.net`), while aborting everything else.
+
+## 2024-11-20 - Robust URL Validation for SSRF Prevention
+**Vulnerability:** Using `netloc` instead of `hostname` from `urllib.parse` to validate allowed domains against SSRF could result in false negatives (blocking valid requests on non-standard ports) or bypasses (if basic auth credentials are used in the URL).
+**Learning:** `netloc` includes credentials and port numbers, which can cause insecure substring matching to fail or allowlist checks to falsely reject. `hostname` isolates just the domain part.
+**Prevention:** When validating URLs against an allowlist in Python, always check `parsed.hostname` instead of `parsed.netloc`.
