@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 
 import 'katex/dist/katex.min.css'
 import Preview from './Preview'
@@ -20,6 +20,8 @@ export interface NotePage {
   drawingDataUrl?: string
   textBoxes?: FreeformTextBox[]
 }
+
+const EMPTY_ARRAY: FreeformTextBox[] = []
 
 function App() {
   // Multi-page state
@@ -58,13 +60,13 @@ function App() {
   const currentPage = pages[currentPageIndex] || pages[0]
 
   // Update current page's fields
-  const updateCurrentPage = (updates: Partial<NotePage>) => {
+  const updateCurrentPage = useCallback((updates: Partial<NotePage>) => {
     setPages((prevPages) => {
       const next = [...prevPages]
       next[currentPageIndex] = { ...next[currentPageIndex], ...updates }
       return next
     })
-  }
+  }, [currentPageIndex])
 
   // Handle adding a new page
   const handleAddPage = () => {
@@ -139,14 +141,14 @@ key takeaway: matrix powers can be computed easily via A^k = P * D^k * P^-1`
   }
 
   // Save drawing strokes to current page
-  const handleSaveDrawing = (dataUrl: string) => {
+  const handleSaveDrawing = useCallback((dataUrl: string) => {
     updateCurrentPage({ drawingDataUrl: dataUrl })
-  }
+  }, [updateCurrentPage])
 
   // Update freeform text boxes on current page
-  const handleUpdateTextBoxes = (boxes: FreeformTextBox[]) => {
+  const handleUpdateTextBoxes = useCallback((boxes: FreeformTextBox[]) => {
     updateCurrentPage({ textBoxes: boxes })
-  }
+  }, [updateCurrentPage])
 
   // Highest-Quality Server-Side PDF Export (Vector-based, no Chrome dependency)
   const exportPDF = async () => {
@@ -224,6 +226,9 @@ key takeaway: matrix powers can be computed easily via A^k = P * D^k * P^-1`
   }
 
   const isDark = theme.startsWith('dark')
+
+  const handleUpdateMarkdown = useCallback((md: string) => updateCurrentPage({ markdown: md }), [updateCurrentPage])
+  const handleToggleEditMarkdown = useCallback(() => setIsEditingMarkdown(prev => !prev), [])
 
   return (
     <div className="app-container">
@@ -407,11 +412,11 @@ key takeaway: matrix powers can be computed easily via A^k = P * D^k * P^-1`
               drawingDataUrl={currentPage.drawingDataUrl}
               onSaveDrawing={handleSaveDrawing}
               canvasRef={canvasRef}
-              textBoxes={currentPage.textBoxes || []}
+              textBoxes={currentPage.textBoxes || EMPTY_ARRAY}
               onUpdateTextBoxes={handleUpdateTextBoxes}
               isEditingMarkdown={isEditingMarkdown}
-              onUpdateMarkdown={(md) => updateCurrentPage({ markdown: md })}
-              onToggleEditMarkdown={() => setIsEditingMarkdown(!isEditingMarkdown)}
+              onUpdateMarkdown={handleUpdateMarkdown}
+              onToggleEditMarkdown={handleToggleEditMarkdown}
             />
 
             {/* Floating Ultra-Modern Annotation Palette anchored cleanly over preview */}
