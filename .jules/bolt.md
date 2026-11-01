@@ -1,0 +1,3 @@
+## 2024-11-01 - Prevent cascading re-renders on keystrokes
+**Learning:** In the React frontend, `App.tsx` manages the main `pages` state and re-renders on every keystroke in the textarea. This forces unnecessary cascading re-renders in the `Preview` component when inline fallback arrays (`|| []`) or inline function references are passed as props, effectively defeating any attempt to memoize the computationally expensive Markdown/LaTeX rendering.
+**Action:** Always use predefined constant variables (e.g., `const EMPTY_TEXT_BOXES: FreeformTextBox[] = []`) for fallback values and wrap handler functions in `useCallback` when passing them down to child components that should be memoized with `React.memo`.
