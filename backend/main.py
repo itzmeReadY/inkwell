@@ -6,6 +6,7 @@ from fastapi.responses import Response
 from pydantic import BaseModel
 from dotenv import load_dotenv
 import sys
+import os
 import asyncio
 
 if sys.platform == "win32":
@@ -20,9 +21,12 @@ from pdf_compiler import compile_html_to_pdf, THEME_STYLES, FONT_FAMILIES
 
 app = FastAPI(title="Inkwell API")
 
+allowed_origins_env = os.getenv('ALLOWED_ORIGINS')
+allowed_origins = allowed_origins_env.split(",") if allowed_origins_env else ["http://localhost:5173", "http://127.0.0.1:5173"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, restrict this
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
