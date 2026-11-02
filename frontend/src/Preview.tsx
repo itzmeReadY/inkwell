@@ -43,7 +43,8 @@ interface PreviewProps {
   onToggleEditMarkdown?: () => void
 }
 
-export default function Preview({
+// OPTIMIZATION: Wrap Preview in React.memo to prevent unnecessary re-renders when typing in the left pane
+export default memo(function Preview({
   markdown,
   theme,
   font,
@@ -152,4 +153,4 @@ export default function Preview({
       )}
     </div>
   )
-}
+})
