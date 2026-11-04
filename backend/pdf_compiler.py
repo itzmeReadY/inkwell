@@ -446,7 +446,7 @@ async def compile_html_to_pdf(
             url = route.request.url
             parsed = urllib.parse.urlparse(url)
             # Allow data URIs and specific CDNs/fonts
-            if parsed.scheme == "data" or parsed.netloc in [
+            if parsed.scheme == "data" or parsed.hostname in [
                 "cdn.jsdelivr.net",
                 "fonts.googleapis.com",
                 "fonts.gstatic.com",
