@@ -1,0 +1,3 @@
+## 2024-11-04 - React Memoization and Stable References with App.tsx
+**Learning:** In applications like Inkwell where `App.tsx` manages a large global state (like text input updates on every keystroke), passing inline arrays (`|| []`) or inline arrow functions as props to expensive child components (like `Preview` which does Markdown/LaTeX rendering) breaks `React.memo()`. This causes cascading re-renders across the entire app on every keystroke, devastating typing performance.
+**Action:** Always extract static fallbacks to constants (e.g., `const EMPTY_ARRAY = []`), wrap handler functions in `useCallback`, and wrap the heavy child component in `React.memo()` to prevent unnecessary re-renders when the child's specific props haven't changed.
